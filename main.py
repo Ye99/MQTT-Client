@@ -1,6 +1,9 @@
 from datetime import datetime
-
+import ujson
 import paho.mqtt.client as mqtt
+
+with open('.credentials') as f:
+    credentials = ujson.load(f)
 
 
 # API document see: https://github.com/eclipse/paho.mqtt.python#subscribe-unsubscribe
@@ -27,7 +30,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.username_pw_set(username="mosquitto", password="mosquitto")
+client.username_pw_set(username=credentials["username"], password=credentials["password"])
 client.connect("192.168.1.194", 1883, 60)
 
 # Blocking call that processes network traffic, dispatches callbacks and
